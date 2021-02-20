@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 
 function createBook(req: Request, res: Response) {
+  console.log("CreateBook function in BooksController");
+  const { bookName, ISBN, author } = req.body;
   return res.json({
-    bookName: "Domain Driven Design",
-    ISBN: "0-321-12521-5",
-    author: "Eric Evans",
+    bookName: bookName,
+    ISBN: ISBN,
+    author: author,
   });
 }
 

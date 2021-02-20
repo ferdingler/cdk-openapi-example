@@ -10,12 +10,12 @@ const server = serverlessExpress.createServer(api);
  *
  * @param event
  */
-export const handler = async (
-  event: APIGatewayProxyEvent,
-  context: Context
-) => {
+export const handler = (event: APIGatewayProxyEvent, context: Context) => {
   console.log("Event=", JSON.stringify(event));
   console.log("Context=", JSON.stringify(context));
 
-  return serverlessExpress.proxy(server, event, context);
+  const response = serverlessExpress.proxy(server, event, context);
+  console.log("Response=", JSON.stringify(response));
+
+  return response;
 };
