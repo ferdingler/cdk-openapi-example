@@ -13,13 +13,13 @@ export class BooksApiStack extends cdk.Stack {
     const lambdaHandler = new lambda.Function(this, "BooksApiHandler", {
       runtime: lambda.Runtime.NODEJS_12_X,
       description: "Handles traffic from the Books API",
-      code: lambda.Code.fromAsset("lib/lambda"),
+      code: lambda.Code.fromAsset("src/"),
       handler: "index.handler",
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),
     });
 
-    const openapiyaml = fs.readFileSync("lib/openapi.yaml", "utf8");
+    const openapiyaml = fs.readFileSync("openapi.yaml", "utf8");
     let spec = openapiyaml.replace(
       "${ApiLambda.Arn}",
       lambdaHandler.functionArn

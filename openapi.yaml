@@ -18,7 +18,7 @@ paths:
               $ref: "#/components/schemas/CreateBookRequest"
       responses:
         "200":
-          description: Book created successfully
+          description: Create book response
           content:
             application/json:
               schema:
