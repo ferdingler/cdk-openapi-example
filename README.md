@@ -4,7 +4,7 @@ This repository is a CDK-based application that creates an Amazon API Gateway RE
 
 ## Project structure
 
-```
+```bash
 cdk-openapi-example
 ├── README.md
 ├── package.json
