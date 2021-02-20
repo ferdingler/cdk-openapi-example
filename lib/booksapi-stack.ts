@@ -14,13 +14,11 @@ export class BooksApiStack extends cdk.Stack {
 
     this.buildLambdaFunction();
     this.buildApiGateway();
+    this.addInvokePermissions();
   }
 
   /**
    * Creates Lambda Function that will handle requests from API Gateway.
-   * Given that the API Gateway is being created from an OpenAPI document,
-   * we need to explicitely give permissions to this Lambda function to be
-   * invoked by the REST API.
    */
   buildLambdaFunction() {
     this.lambdaHandler = new Function(this, "BooksApiHandler", {
@@ -31,18 +29,25 @@ export class BooksApiStack extends cdk.Stack {
       memorySize: 512,
       timeout: cdk.Duration.seconds(10),
     });
-
-    const stack = cdk.Stack.of(this);
-    this.lambdaHandler.addPermission("Invoke", {
-      sourceArn: `arn:${stack.partition}:execute-api:${stack.region}:${stack.account}:${this.restApi.restApiId}/*`,
-      principal: new iam.ServicePrincipal("apigateway.amazonaws.com"),
-    });
   }
 
   buildApiGateway() {
     const openApiSpec = this.parseOpenApiSpec();
     this.restApi = new SpecRestApi(this, "BooksApi", {
       apiDefinition: ApiDefinition.fromInline(openApiSpec),
+    });
+  }
+
+  /**
+   * Given that the API is created from an OpenAPI document, CDK doesn't automatically
+   * give permissions to the Lambda function to be invoked. We need to explicitely add
+   * a Resource Policy on the Lambda so that API Gateway can invoke it.
+   */
+  addInvokePermissions() {
+    const stack = cdk.Stack.of(this);
+    this.lambdaHandler.addPermission("Invoke", {
+      sourceArn: `arn:${stack.partition}:execute-api:${stack.region}:${stack.account}:${this.restApi.restApiId}/*`,
+      principal: new iam.ServicePrincipal("apigateway.amazonaws.com"),
     });
   }
 
