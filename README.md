@@ -1,14 +1,29 @@
-# Welcome to your CDK TypeScript project!
+# OpenAPI and CDK
 
-This is a blank project for TypeScript development with CDK.
+This repository is a CDK-based application that creates an Amazon API Gateway REST API using the openapi.yaml file. The API is backed by a Lambda Function that handles the requests coming from API Gateway. The OpenAPI document uses API Gateway extensions to define the Lambda handler and the Request validation configuration.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Project structure
+
+```
+cdk-openapi-example
+├── README.md
+├── package.json
+├── cdk.json
+├── openapi.yaml                # OpenAPI spec, uses Amazon API Gateway extensions
+├── bin
+│   └── booksapi.ts             # CDK Application is defined
+├── lib
+│   └── booksapi-stack.ts       # CloudFormation stack that creates REST API and Lambda
+└── src                         # Source code folder for the Lambda function (NodeJS app)
+    ├── index.ts                # Entry point for the Lambda handler
+    ├── package.json            # Dependencies for the Lambda function
+    └── api
+    │    ├── index.ts           # Definition of ExpressJS routes and Middlewares
+    │    └── books-api.ts       # Definition for Book-specific routes
+    └── controllers
+         └── books-ctrl.ts      # Implementation of the ExpressJS route handlers
+```
 
 ## Useful commands
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+- `npm run deploy` builds and deploys the application to an AWS account.
